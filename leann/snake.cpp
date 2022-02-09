@@ -6,6 +6,7 @@
 #include "snake.hpp"
 #include "window.hpp"
 #include "segment.hpp"
+#include "playground.hpp"
 
 #define UP 1
 #define DOWN 2
@@ -19,6 +20,7 @@ const Uint8 *keystates = SDL_GetKeyboardState(NULL);
 
 Snake::Snake(int length, int direction){
   this->head = new Segment(xpos, ypos, direction);
+
   for(int i=0; i<length; i++){
     int x = xpos;
     int y = ypos;
@@ -49,15 +51,13 @@ void Snake::create(SDL_Renderer* renderer)
 {
   Segment *seg = this->head;
 
-  while(seg != NULL)
-  {
-    SDL_SetRenderDrawColor(renderer, 255, 0, 0, 255 );
-    SDL_Rect body;
-    body = {seg->getX(),seg->getY(),45,45};
-    SDL_RenderFillRect(renderer, &body);
-    SDL_RenderDrawRect(renderer, &body); // Dessine la tête du serpent
-    seg = seg->next;
-  }
+  SDL_SetRenderDrawColor(renderer, 255, 0, 0, 255 );
+  SDL_Rect body;
+  body = {seg->getX(),seg->getY(),45,45};
+  SDL_RenderFillRect(renderer, &body);
+  SDL_RenderDrawRect(renderer, &body); // Dessine la tête du serpent
+  //seg = seg->next;
+  
 }
 
 
@@ -96,7 +96,6 @@ Segment Snake::getHead(){
 void Snake::move()
 {
   turn();
-  //del();
   addHead();
 }
 
@@ -140,41 +139,13 @@ void Snake::addHead()
   newSegment->setDir(head->getDir());
   newSegment->next = head;
   head = newSegment;
-}
-
-// FONCTION QUI SUPPRIME LE DERNIER SEGMENT DU SERPENT
-
-void Snake::del(){
-  Segment *seg = head;
-  Segment *tail = NULL;
-
-
-  if(head->next == NULL)
-  {
-    std::cout << "head next null" << std::endl;
-    head = NULL;
-  }
-
-  while(seg->next->next != NULL)
-  {
-    std::cout << "while" << std::endl;
-    seg = seg->next;
-  }
   
-  tail = seg->next;
-  seg->next == NULL;
-  std::cout << "tail null" << std::endl;
-
-  delete tail;
- 
-
 }
+
 
 // FONCTION QUI AJOUTE UN SEGMENT A LA QUEUE DU SERPENT QUAND IL MANGE UN FRUIT
 
-void Snake::addBack(){
-}
-
+void Snake::addBack(){}
 
 
 

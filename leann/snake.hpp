@@ -1,10 +1,5 @@
 #pragma once
-#include <SDL2/SDL.h>
-#include <stdio.h>
-#include <stdlib.h>
-#include <iostream>
-#include <string>
-#include <cstdio>
+
 
 #include "segment.hpp"
 
@@ -14,13 +9,10 @@ class Snake{
         ~Snake();
         void move();
         void create(SDL_Renderer* renderer);
-        //void eat();
         //void grow();
-        void del();
         void addHead();
         void addBack();
         void turn();
-        //void print();
         int direction();
         Segment getHead();
         bool coll();
