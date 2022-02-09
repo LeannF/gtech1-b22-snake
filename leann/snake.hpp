@@ -9,13 +9,14 @@ class Snake{
         ~Snake();
         void move();
         void create(SDL_Renderer* renderer);
-        //void grow();
-        void addHead();
+        void grow();
+        void movement();
         void addBack();
         void turn();
         int direction();
         Segment getHead();
         bool coll();
+        bool eaten();
 
     private:
         Segment* head = NULL;

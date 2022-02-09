@@ -13,7 +13,5 @@ class Playground{
     public:
         Playground();
         ~Playground();
-        void Fruit(SDL_Renderer* renderer);
 
-    private:
 };

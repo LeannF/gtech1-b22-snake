@@ -53,10 +53,10 @@ void Snake::create(SDL_Renderer* renderer)
 
   SDL_SetRenderDrawColor(renderer, 255, 0, 0, 255 );
   SDL_Rect body;
-  body = {seg->getX(),seg->getY(),45,45};
+  body = {seg->getX(),seg->getY(),35,35};
   SDL_RenderFillRect(renderer, &body);
   SDL_RenderDrawRect(renderer, &body); // Dessine la tête du serpent
-  //seg = seg->next;
+  seg = seg->next;
   
 }
 
@@ -95,13 +95,39 @@ Segment Snake::getHead(){
 
 void Snake::move()
 {
+  direction();
   turn();
-  addHead();
+  movement();
 }
 
-// FONCTION QUI AJOUTE UN SEGMENT A LA TETE DU SERPENT
 
-void Snake::addHead()
+
+// FONCTION GRANDISSEMENT DU SERPENT
+
+void Snake::grow()
+{
+  int x = head->getX();
+  int y = head->getY();
+  Segment *newSegment = new Segment(x, y, dir);
+
+  if ( keystates[SDL_SCANCODE_SPACE] ) {
+    if(head == NULL){
+      std::cout << "head null";
+      head = newSegment;
+      return;
+    }
+    
+    newSegment->setX(x);
+    newSegment->setY(y);
+    newSegment->setDir(head->getDir());
+    newSegment->next = head;
+    head = newSegment;
+  }
+}
+
+// FONCTION QUI BOUGE LE SERPENT
+
+void Snake::movement()
 {
   int x = head->getX();
   int y = head->getY();
@@ -143,9 +169,43 @@ void Snake::addHead()
 }
 
 
+
 // FONCTION QUI AJOUTE UN SEGMENT A LA QUEUE DU SERPENT QUAND IL MANGE UN FRUIT
 
-void Snake::addBack(){}
+void Snake::addBack(){
+  Segment *seg = head;
+
+  while (seg->next != NULL)
+  {
+    seg = seg->next;
+  }
+
+  int x = seg->getX();
+  int y = seg->getY();
+
+  switch (seg->getDir())
+  {
+  case UP:
+      y += MOVE;
+      break;
+  case DOWN:
+      y -= MOVE;
+      break;
+  case RIGHT:
+      x -= MOVE;
+      break;
+  case LEFT:
+      x += MOVE;
+      break;
+  default:
+    break;
+  }
+  Segment *newSegment  = new Segment(x, y, seg->getDir());
+  newSegment->setX(x);
+  newSegment->setY(y);
+  newSegment->setDir(head->getDir());
+  seg->next = newSegment;
+}
 
 
 
@@ -155,22 +215,12 @@ void Snake::turn()
   head->setDir(dir);
 }
 
-// FONCTION GRANDISSEMENT DU SERPENT
-
-/*void Snake::grow(){
-
-  if ( keystates[SDL_SCANCODE_SPACE] ) {
-    Segment *newSegment = new Segment(xpos, ypos);
-  }
-}*/
-
-
 
 // FONCTION COLLISION DU SERPENT
 
 bool Snake::coll()
 {
-  if( ypos > 720 || ypos < 0 || xpos > 1080 || xpos < 0  ) {
+  if( head->getY() > 720 || head->getY() < 0 || head->getX() > 1080 || head->getX() < 0  ) {
     return true;
   }
   else {
